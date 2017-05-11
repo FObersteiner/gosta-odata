@@ -2,6 +2,7 @@ package godata
 
 import (
 	"regexp"
+	"strings"
 )
 
 const (
@@ -239,6 +240,8 @@ func (p *Parser) PostfixToTree(queue *tokenQueue) (*ParseNode, error) {
 			}
 			stack.Push(node)
 		}
+
+		stack.Peek().Token.Value = strings.TrimSpace(stack.Peek().Token.Value)
 	}
 
 	return currNode, nil
