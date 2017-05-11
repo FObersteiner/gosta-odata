@@ -7,6 +7,26 @@ import (
 	"testing"
 )
 
+// TestFilterLiteralContainingFunctionName checks if "time" is not seen as an function
+func TestFilterLiteralContainingFunctionName(t *testing.T) {
+	tokenizer := FilterTokenizer()
+	input := "time lt '2015-10-14T23:30:00.104+02:00'"
+	expect := []*Token{
+		{Value: "time ", Type: FilterTokenLiteral},
+		{Value: "lt", Type: FilterTokenLogical},
+		{Value: "'2015-10-14T23:30:00.104+02:00'", Type: FilterTokenString},
+	}
+	output, err := tokenizer.Tokenize(input)
+	if err != nil {
+		t.Error(err)
+	}
+
+	result, err := CompareTokens(expect, output)
+	if !result {
+		t.Error(err)
+	}
+}
+
 func TestFilterAny(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "Tags/any(d:d/Key eq 'Site' and d/Value lt 10)"
@@ -128,12 +148,17 @@ func BenchmarkFilterTokenizer(b *testing.B) {
 // Check if two slices of tokens are the same.
 func CompareTokens(a, b []*Token) (bool, error) {
 	if len(a) != len(b) {
-		return false, errors.New("Different lengths")
+		res := ""
+		for _, t := range b {
+			res += fmt.Sprintf("| %s ", t.Value)
+		}
+		return false, errors.New(fmt.Sprintf("Different lengths, result: %s", res))
 	}
 	for i, _ := range a {
 		if a[i].Value != b[i].Value || a[i].Type != b[i].Type {
 			return false, errors.New("Different at index " + strconv.Itoa(i) + " " +
-				a[i].Value + " != " + b[i].Value + " or types are different.")
+				a[i].Value + " != " + b[i].Value +
+				fmt.Sprintf(" or types are different. Type expected: %v Type result: %v", a[i].Type, b[i].Type))
 		}
 	}
 	return true, nil

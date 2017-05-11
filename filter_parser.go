@@ -6,22 +6,22 @@ const (
 	FilterTokenWhitespace
 	FilterTokenNav
 	FilterTokenColon // for 'any' and 'all' lambda operators
-	FilterTokenComma
+	FilterTokenComma // 5
 	FilterTokenLogical
 	FilterTokenOp
 	FilterTokenFunc
 	FilterTokenLambda
-	FilterTokenNull
+	FilterTokenNull // 10
 	FilterTokenIt
 	FilterTokenRoot
 	FilterTokenFloat
 	FilterTokenInteger
-	FilterTokenString
+	FilterTokenString // 15
 	FilterTokenDate
 	FilterTokenTime
 	FilterTokenDateTime
 	FilterTokenBoolean
-	FilterTokenLiteral
+	FilterTokenLiteral // 20
 )
 
 var GlobalFilterTokenizer = FilterTokenizer()
@@ -56,9 +56,10 @@ func FilterTokenizer() *Tokenizer {
 	t.Add("^,", FilterTokenComma)
 	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
 	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
+	t.Add("^(time |floor )", FilterTokenLiteral) // Get a "function" name as literal when a trailing space is found
 	t.Add("^(contains|endswith|startswith|length|indexof|substring|tolower|toupper|"+
 		"trim|concat|year|month|day|hour|minute|second|fractionalseconds|date|"+
-		"time|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
+		"time\b|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
 	t.Add("^(any|all)", FilterTokenLambda)
 	t.Add("^null", FilterTokenNull)
