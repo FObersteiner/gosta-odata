@@ -7,6 +7,25 @@ import (
 	"testing"
 )
 
+func TestDateTimeWithOffset(t *testing.T) {
+	tokenizer := FilterTokenizer()
+	input := "time lt 2015-10-14T23:30:00.104+02:00"
+	expect := []*Token{
+		{Value: "time ", Type: FilterTokenLiteral},
+		{Value: "lt", Type: FilterTokenLogical},
+		{Value: "2015-10-14T23:30:00.104+02:00", Type: FilterTokenDateTime},
+	}
+	output, err := tokenizer.Tokenize(input)
+	if err != nil {
+		t.Error(err)
+	}
+
+	result, err := CompareTokens(expect, output)
+	if !result {
+		t.Error(err)
+	}
+}
+
 // TestFilterLiteralContainingFunctionName checks if "time" is not seen as an function
 func TestFilterLiteralContainingFunctionName(t *testing.T) {
 	tokenizer := FilterTokenizer()
