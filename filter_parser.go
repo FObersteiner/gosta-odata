@@ -22,6 +22,7 @@ const (
 	FilterTokenDateTime
 	FilterTokenBoolean
 	FilterTokenLiteral // 20
+	FilterTokenGeography
 )
 
 var GlobalFilterTokenizer = FilterTokenizer()
@@ -49,21 +50,24 @@ func ParseFilterString(filter string) (*GoDataFilterQuery, error) {
 // Create a tokenizer capable of tokenizing filter statements
 func FilterTokenizer() *Tokenizer {
 	t := Tokenizer{}
-	t.Add("^\\(", FilterTokenOpenParen)
-	t.Add("^\\)", FilterTokenCloseParen)
+
 	t.Add("^/", FilterTokenNav)
 	t.Add("^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}T[0-9]{2,2}:[0-9]{2,2}(:[0-9]{2,2}(.[0-9]+)?)?(Z|[+-][0-9]{2,2}:[0-9]{2,2})", FilterTokenDateTime)
 	t.Add("^[0-9]{2,2}:[0-9]{2,2}(:[0-9]{2,2}(.[0-9]+)?)?", FilterTokenTime)
 	t.Add("^-?[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}", FilterTokenDate)
 	t.Add("^:", FilterTokenColon)
 	t.Add("^,", FilterTokenComma)
-	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
-	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
-	t.Add("^(time |floor )", FilterTokenLiteral) // Get a "function" name as literal when a trailing space is found
 	t.Add("^(contains|endswith|startswith|length|indexof|substring|tolower|toupper|"+
 		"trim|concat|year|month|day|hour|minute|second|fractionalseconds|date|"+
 		"time\b|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
+	t.Add("^(st_disjoint|st_touches|st_within|st_overlaps|st_crosses|st_intersects|st_contains|st_relate)", FilterTokenFunc)
+	t.Add("^geography", FilterTokenGeography)
+	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
+	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
+	t.Add("^(time |floor )", FilterTokenLiteral) // Get a "function" name as literal when a trailing space is found
+	t.Add("^\\(", FilterTokenOpenParen)
+	t.Add("^\\)", FilterTokenCloseParen)
 	t.Add("^(any|all)", FilterTokenLambda)
 	t.Add("^null", FilterTokenNull)
 	t.Add("^\\$it", FilterTokenIt)
@@ -98,6 +102,7 @@ func FilterParser() *Parser {
 	parser.DefineOperator("ne", 2, OpAssociationLeft, 3)
 	parser.DefineOperator("and", 2, OpAssociationLeft, 2)
 	parser.DefineOperator("or", 2, OpAssociationLeft, 1)
+	parser.DefineOperator("geography", 1, OpAssociationLeft, 1)
 	parser.DefineOperator(":", 2, OpAssociationLeft, 1)
 	parser.DefineFunction("contains", 2)
 	parser.DefineFunction("endswith", 2)
@@ -129,10 +134,19 @@ func FilterParser() *Parser {
 	parser.DefineFunction("isof", 2)
 	parser.DefineFunction("cast", 2)
 	parser.DefineFunction("geo.distance", 2)
-	parser.DefineFunction("geo.intesects", 2)
+	parser.DefineFunction("geo.intersects", 2)
 	parser.DefineFunction("geo.length", 1)
 	parser.DefineFunction("any", 1)
 	parser.DefineFunction("all", 1)
+	parser.DefineFunction("st_equals", 2)
+	parser.DefineFunction("st_disjoint", 2)
+	parser.DefineFunction("st_touches", 2)
+	parser.DefineFunction("st_within", 2)
+	parser.DefineFunction("st_overlaps", 2)
+	parser.DefineFunction("st_crosses", 2)
+	parser.DefineFunction("st_intersects", 2)
+	parser.DefineFunction("st_contains", 2)
+	parser.DefineFunction("st_relate", 2)
 
 	return parser
 }

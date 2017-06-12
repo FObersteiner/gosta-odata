@@ -7,6 +7,29 @@ import (
 	"testing"
 )
 
+func TestFilterTokenizerGeoFunc(t *testing.T) {
+	tokenizer := GlobalFilterTokenizer
+	input := "st_within(location, geography'LINESTRING(7.5 51.5, 7.5 53.5)')"
+	expect := []*Token{
+		&Token{Value: "st_within", Type: FilterTokenFunc},
+		&Token{Value: "(", Type: FilterTokenOpenParen},
+		&Token{Value: "location", Type: FilterTokenLiteral},
+		&Token{Value: ",", Type: FilterTokenComma},
+		&Token{Value: "geography", Type: FilterTokenGeography},
+		&Token{Value: "'LINESTRING(7.5 51.5, 7.5 53.5)'", Type: FilterTokenString},
+		&Token{Value: ")", Type: FilterTokenCloseParen},
+	}
+	output, err := tokenizer.Tokenize(input)
+	if err != nil {
+		t.Error(err)
+	}
+
+	result, err := CompareTokens(expect, output)
+	if !result {
+		t.Error(err)
+	}
+}
+
 func TestDateTimeWithOffset(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "time lt 2015-10-14T23:30:00.104+02:00"
