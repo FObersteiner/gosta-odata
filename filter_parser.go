@@ -146,7 +146,7 @@ func FilterParser() *Parser {
 	parser.DefineFunction("st_crosses", 2)
 	parser.DefineFunction("st_intersects", 2)
 	parser.DefineFunction("st_contains", 2)
-	parser.DefineFunction("st_relate", 2)
+	parser.DefineFunction("st_relate", 3)
 
 	return parser
 }
