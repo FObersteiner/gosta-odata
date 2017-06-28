@@ -57,7 +57,7 @@ func FilterTokenizer() *Tokenizer {
 	t.Add("^-?[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}", FilterTokenDate)
 	t.Add("^:", FilterTokenColon)
 	t.Add("^,", FilterTokenComma)
-	t.Add("^(contains|endswith|startswith|length|indexof|substring|tolower|toupper|"+
+	t.Add("^(contains|endswith|startswith|length|indexof|substringof|substring|tolower|toupper|"+
 		"trim|concat|year|month|day|hour|minute|second|fractionalseconds|date|"+
 		"time\b|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
@@ -109,6 +109,7 @@ func FilterParser() *Parser {
 	parser.DefineFunction("startswith", 2)
 	parser.DefineFunction("length", 1)
 	parser.DefineFunction("indexof", 2)
+	parser.DefineFunction("substringof", 2)
 	parser.DefineFunction("substring", 2)
 	parser.DefineFunction("tolower", 1)
 	parser.DefineFunction("toupper", 1)
