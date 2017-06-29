@@ -110,7 +110,7 @@ func FilterParser() *Parser {
 	parser.DefineFunction("length", 1)
 	parser.DefineFunction("indexof", 2)
 	parser.DefineFunction("substringof", 2)
-	parser.DefineFunction("substring", 2)
+	parser.DefineFunction("substring", 3)
 	parser.DefineFunction("tolower", 1)
 	parser.DefineFunction("toupper", 1)
 	parser.DefineFunction("trim", 1)
