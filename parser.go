@@ -225,6 +225,9 @@ func (p *Parser) PostfixToTree(queue *tokenQueue) (*ParseNode, error) {
 			f := p.Functions[node.Token.Value]
 			// pop off function parameters
 			for i := 0; i < f.Params; i++ {
+				if stack.Empty() {
+					continue
+				}
 				// prepend children so they get added in the right order
 				node.Children = append([]*ParseNode{stack.Pop()}, node.Children...)
 			}
@@ -235,6 +238,9 @@ func (p *Parser) PostfixToTree(queue *tokenQueue) (*ParseNode, error) {
 			o := p.Operators[node.Token.Value]
 			// pop off operands
 			for i := 0; i < o.Operands; i++ {
+				if stack.Empty() {
+					continue
+				}
 				// prepend children so they get added in the right order
 				node.Children = append([]*ParseNode{stack.Pop()}, node.Children...)
 			}
