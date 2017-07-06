@@ -57,6 +57,11 @@ func (t *Tokenizer) TokenizeBytes(target []byte) ([]*Token, error) {
 		for _, m := range t.TokenMatchers {
 			token := m.Re.Find(target)
 			if len(token) > 0 {
+				//If a filter is found but next char is not "(" than don't treat it as filter
+				if m.Token == FilterTokenFunc && string(target[len(token):len(token)+1]) != "(" {
+					continue
+				}
+
 				parsed := Token{Value: string(token), Type: m.Token}
 				result = append(result, &parsed)
 				target = target[len(token):] // remove the token from the input
@@ -140,8 +145,8 @@ func (p *Parser) InfixToPostfix(tokens []*Token) (*tokenQueue, error) {
 		token := tokens[0]
 		tokens = tokens[1:]
 
-		if _, ok := p.Functions[token.Value]; ok {
-			// push functions onto the stack
+		if token.Type == FilterTokenFunc {
+			// push functions onto the stack if no tokens are left or the next token is a "("
 			stack.Push(token)
 		} else if token.Value == "," {
 			// function parameter separator, pop off stack until we see a "("
@@ -183,7 +188,8 @@ func (p *Parser) InfixToPostfix(tokens []*Token) (*tokenQueue, error) {
 			stack.Pop()
 			// if next token is a function, move it to the queue
 			if !stack.Empty() {
-				if _, ok := p.Functions[stack.Peek().Value]; ok {
+				//if _, ok := p.Functions[stack.Peek().Value]; ok {
+				if stack.Peek().Type == FilterTokenFunc {
 					queue.Enqueue(stack.Pop())
 				}
 			}
@@ -219,7 +225,7 @@ func (p *Parser) PostfixToTree(queue *tokenQueue) (*ParseNode, error) {
 		currNode = &ParseNode{queue.Dequeue(), nil, make([]*ParseNode, 0)}
 		stack.Push(currNode)
 
-		if _, ok := p.Functions[stack.Peek().Token.Value]; ok {
+		if stack.Peek().Token.Type == FilterTokenFunc {
 			// if the top of the stack is a function
 			node := stack.Pop()
 			f := p.Functions[node.Token.Value]

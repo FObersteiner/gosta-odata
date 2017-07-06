@@ -59,13 +59,12 @@ func FilterTokenizer() *Tokenizer {
 	t.Add("^,", FilterTokenComma)
 	t.Add("^(contains|endswith|startswith|length|indexof|substringof|substring|tolower|toupper|"+
 		"trim|concat|year|month|day|hour|minute|second|fractionalseconds|date|"+
-		"time\b|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
+		"time|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
 	t.Add("^(st_disjoint|st_touches|st_within|st_overlaps|st_crosses|st_intersects|st_contains|st_relate)", FilterTokenFunc)
 	t.Add("^geography", FilterTokenGeography)
 	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
 	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
-	t.Add("^(time |floor )", FilterTokenLiteral) // Get a "function" name as literal when a trailing space is found
 	t.Add("^\\(", FilterTokenOpenParen)
 	t.Add("^\\)", FilterTokenCloseParen)
 	t.Add("^(any|all)", FilterTokenLambda)

@@ -34,7 +34,7 @@ func TestDateTimeWithOffset(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "time lt 2015-10-14T23:30:00.104+02:00"
 	expect := []*Token{
-		{Value: "time ", Type: FilterTokenLiteral},
+		{Value: "time", Type: FilterTokenLiteral},
 		{Value: "lt", Type: FilterTokenLogical},
 		{Value: "2015-10-14T23:30:00.104+02:00", Type: FilterTokenDateTime},
 	}
@@ -54,7 +54,7 @@ func TestFilterLiteralContainingFunctionName(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "time lt '2015-10-14T23:30:00.104+02:00'"
 	expect := []*Token{
-		{Value: "time ", Type: FilterTokenLiteral},
+		{Value: "time", Type: FilterTokenLiteral},
 		{Value: "lt", Type: FilterTokenLogical},
 		{Value: "'2015-10-14T23:30:00.104+02:00'", Type: FilterTokenString},
 	}
