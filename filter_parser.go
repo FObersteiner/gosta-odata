@@ -61,7 +61,7 @@ func FilterTokenizer() *Tokenizer {
 		"trim|concat|year|month|day|hour|minute|second|fractionalseconds|date|"+
 		"time|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
-	t.Add("^(st_disjoint|st_touches|st_within|st_overlaps|st_crosses|st_intersects|st_contains|st_relate)", FilterTokenFunc)
+	t.Add("^(st_disjoint|st_touches|st_within|st_overlaps|st_crosses|st_intersects|st_contains|st_relate|st_equals)", FilterTokenFunc)
 	t.Add("^geography", FilterTokenGeography)
 	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
 	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
