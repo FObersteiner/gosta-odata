@@ -50,23 +50,22 @@ func ParseFilterString(filter string) (*GoDataFilterQuery, error) {
 // Create a tokenizer capable of tokenizing filter statements
 func FilterTokenizer() *Tokenizer {
 	t := Tokenizer{}
-
-	t.Add("^/", FilterTokenNav)
 	t.Add("^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}T[0-9]{2,2}:[0-9]{2,2}(:[0-9]{2,2}(.[0-9]+)?)?(Z|[+-][0-9]{2,2}:[0-9]{2,2})", FilterTokenDateTime)
 	t.Add("^[0-9]{2,2}:[0-9]{2,2}(:[0-9]{2,2}(.[0-9]+)?)?", FilterTokenTime)
 	t.Add("^-?[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}", FilterTokenDate)
+	t.Add("^\\(", FilterTokenOpenParen)
+	t.Add("^\\)", FilterTokenCloseParen)
+	t.Add("^/", FilterTokenNav)
 	t.Add("^:", FilterTokenColon)
 	t.Add("^,", FilterTokenComma)
+	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
+	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
 	t.Add("^(contains|endswith|startswith|length|indexof|substringof|substring|tolower|toupper|"+
 		"trim|concat|year|month|day|hour|minute|second|fractionalseconds|date|"+
 		"time|totaloffsetminutes|now|maxdatetime|mindatetime|totalseconds|round|"+
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
 	t.Add("^(st_disjoint|st_touches|st_within|st_overlaps|st_crosses|st_intersects|st_contains|st_relate|st_equals)", FilterTokenFunc)
 	t.Add("^geography", FilterTokenGeography)
-	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
-	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
-	t.Add("^\\(", FilterTokenOpenParen)
-	t.Add("^\\)", FilterTokenCloseParen)
 	t.Add("^(any|all)", FilterTokenLambda)
 	t.Add("^null", FilterTokenNull)
 	t.Add("^\\$it", FilterTokenIt)
