@@ -56,6 +56,7 @@ func (t *Tokenizer) TokenizeBytes(target []byte) ([]*Token, error) {
 		match = false
 		for _, m := range t.TokenMatchers {
 			token := m.Re.Find(target)
+
 			if len(token) > 0 {
 				//If a filter is found but next char is not "(" than don't treat it as filter
 				if m.Token == FilterTokenFunc && string(target[len(token):len(token)+1]) != "(" {
@@ -150,7 +151,7 @@ func (p *Parser) InfixToPostfix(tokens []*Token) (*tokenQueue, error) {
 			stack.Push(token)
 		} else if token.Value == "," {
 			// function parameter separator, pop off stack until we see a "("
-			for stack.Peek().Value != "(" || stack.Empty() {
+			for !stack.Empty() && stack.Peek().Value != "(" {
 				queue.Enqueue(stack.Pop())
 			}
 			// there was an error parsing
