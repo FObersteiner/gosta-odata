@@ -12,6 +12,10 @@ const (
 	ExpandTokenSemicolon
 	ExpandTokenEquals
 	ExpandTokenLiteral
+	ExpandTokenString
+	ExpandTokenDateTime
+	ExpandTokenTime
+	ExpandTokenDate
 )
 
 var GlobalExpandTokenizer = ExpandTokenizer()
@@ -38,6 +42,10 @@ func ExpandTokenizer() *Tokenizer {
 	t.Add("^,", ExpandTokenComma)
 	t.Add("^;", ExpandTokenSemicolon)
 	t.Add("^=", ExpandTokenEquals)
+	t.Add("^'(''|[^'])*'", ExpandTokenString)
+	t.Add("^[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}T[0-9]{2,2}:[0-9]{2,2}(:[0-9]{2,2}(.[0-9]+)?)?(Z|[+-][0-9]{2,2}:[0-9]{2,2})", ExpandTokenDateTime)
+	t.Add("^[0-9]{2,2}:[0-9]{2,2}(:[0-9]{2,2}(.[0-9]+)?)?", ExpandTokenTime)
+	t.Add("^-?[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}", ExpandTokenDate)
 	t.Add("^[a-zA-Z0-9_\\'\\.:\\$ \\*]+", ExpandTokenLiteral)
 
 	return &t
