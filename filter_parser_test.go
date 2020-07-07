@@ -30,6 +30,27 @@ func TestFilterTokenizerGeoFunc(t *testing.T) {
 	}
 }
 
+func TestLogicalOperator(t *testing.T) {
+	tokenizer := GlobalFilterTokenizer
+	input := "properties/gemeentecode eq '518'"
+	expect := []*Token{
+		&Token{Value: "properties", Type: FilterTokenLiteral},
+		&Token{Value: "/", Type: FilterTokenNav},
+		&Token{Value: "gemeentecode", Type: FilterTokenLiteral},
+		&Token{Value: "eq", Type: FilterTokenLogical},
+		&Token{Value: "'518'", Type: FilterTokenString},
+	}
+	output, err := tokenizer.Tokenize(input)
+	if err != nil {
+		t.Error(err)
+	}
+
+	result, err := CompareTokens(expect, output)
+	if !result {
+		t.Error(err)
+	}
+}
+
 func TestDateTimeWithOffset(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "time lt 2015-10-14T23:30:00.104+02:00"

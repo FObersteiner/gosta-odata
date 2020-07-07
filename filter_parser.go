@@ -63,7 +63,7 @@ func FilterTokenizer() *Tokenizer {
 		"floor|ceiling|isof|cast|geo.distance|geo.intersects|geo.length)", FilterTokenFunc)
 	t.Add("^(st_disjoint|st_touches|st_within|st_overlaps|st_crosses|st_intersects|st_contains|st_relate|st_equals)", FilterTokenFunc)
 	t.Add("^geography", FilterTokenGeography)
-	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)", FilterTokenLogical)
+	t.Add("^(eq|ne|gt|ge|lt|le|and|or|not|has)\\b", FilterTokenLogical)
 	t.Add("^(add|sub|mul|div|mod)", FilterTokenOp)
 	t.Add("^\\(", FilterTokenOpenParen)
 	t.Add("^\\)", FilterTokenCloseParen)
