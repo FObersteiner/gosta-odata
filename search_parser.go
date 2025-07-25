@@ -8,8 +8,10 @@ const (
 	SearchTokenWhitespace
 )
 
-var GlobalSearchTokenizer = SearchTokenizer()
-var GlobalSearchParser = SearchParser()
+var (
+	GlobalSearchTokenizer = SearchTokenizer()
+	GlobalSearchParser    = SearchParser()
+)
 
 // Convert an input string from the $filter part of the URL into a parse
 // tree that can be used by providers to create a response.

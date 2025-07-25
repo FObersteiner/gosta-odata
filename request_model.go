@@ -110,8 +110,7 @@ type GoDataSearchQuery struct {
 	Tree *ParseNode
 }
 
-type GoDataFormatQuery struct {
-}
+type GoDataFormatQuery struct{}
 
 // Check if this identifier has more than one key/value pair.
 func (id *GoDataIdentifier) HasMultiple() bool {
@@ -125,7 +124,7 @@ func (id *GoDataIdentifier) HasMultiple() bool {
 // Return the first key in the map. This is how you should get the identifier
 // for single values, e.g. when the path is Employee(1), etc.
 func (id *GoDataIdentifier) Get() string {
-	for k, _ := range map[string]string(*id) {
+	for k := range map[string]string(*id) {
 		return k
 	}
 	return ""

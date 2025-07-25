@@ -8,7 +8,6 @@ import (
 // Parse a request from the HTTP server and format it into a GoDaataRequest type
 // to be passed to a provider to produce a result.
 func ParseRequest(path string, query url.Values) (*GoDataRequest, error) {
-
 	firstSegment, lastSegment, err := ParseUrlPath(path)
 	if err != nil {
 		return nil, err
@@ -24,7 +23,6 @@ func ParseRequest(path string, query url.Values) (*GoDataRequest, error) {
 // Compare a request to a given service, and validate the semantics and update
 // the request with semantics included
 func SemanticizeRequest(req *GoDataRequest, service *GoDataService) error {
-
 	// if request kind is a resource
 	for segment := req.FirstSegment; segment != nil; segment = segment.Next {
 		err := SemanticizePathSegment(segment, service)
@@ -185,7 +183,6 @@ func SemanticizePathSegment(segment *GoDataSegment, service *GoDataService) erro
 		semanticRef := segment.Prev.SemanticReference.(*GoDataEntitySet)
 
 		entity, err := service.LookupEntityType(semanticRef.EntityType)
-
 		if err != nil {
 			return err
 		}
@@ -291,7 +288,7 @@ func ParseUrlQuery(query url.Values) (*GoDataQuery, error) {
 }
 
 func ParseIdentifiers(segment string) *GoDataIdentifier {
-	if !(strings.Contains(segment, "(") && strings.Contains(segment, ")")) {
+	if !strings.Contains(segment, "(") || !strings.Contains(segment, ")") {
 		return nil
 	}
 

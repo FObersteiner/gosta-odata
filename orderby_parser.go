@@ -22,7 +22,7 @@ func ParseOrderByString(orderby string) (*GoDataOrderByQuery, error) {
 	for _, v := range items {
 		parts := strings.Split(v, " ")
 		field := &Token{Value: parts[0]}
-		var order string = ASC
+		order := ASC
 		if len(parts) > 1 {
 			if strings.ToLower(parts[1]) == ASC {
 				order = ASC

@@ -121,7 +121,6 @@ func BuildService(provider GoDataProvider, serviceUrl string) (*GoDataService, e
 	}
 
 	parsedUrl, err := url.Parse(serviceUrl)
-
 	if err != nil {
 		return nil, err
 	}
@@ -142,9 +141,7 @@ func BuildService(provider GoDataProvider, serviceUrl string) (*GoDataService, e
 // The default handler for parsing requests as GoDataRequests, passing them
 // to a GoData provider, and then building a response.
 func (service *GoDataService) GoDataHTTPHandler(w http.ResponseWriter, r *http.Request) {
-
 	request, err := ParseRequest(r.URL.Path, r.URL.Query())
-
 	if err != nil {
 		panic(err) // TODO: return proper error
 	}
@@ -152,30 +149,30 @@ func (service *GoDataService) GoDataHTTPHandler(w http.ResponseWriter, r *http.R
 	// Semanticize all tokens in the request, connecting them with their
 	// corresponding types in the service
 	err = SemanticizeRequest(request, service)
-
 	if err != nil {
 		panic(err) // TODO: return proper error
 	}
 
 	// TODO: differentiate GET and POST requests
-	var response []byte = []byte{}
-	if request.RequestKind == RequestKindMetadata {
+	response := []byte{}
+	switch request.RequestKind {
+	case RequestKindMetadata:
 		response, err = service.buildMetadataResponse(request)
-	} else if request.RequestKind == RequestKindService {
+	case RequestKindService:
 		response, err = service.buildServiceResponse(request)
-	} else if request.RequestKind == RequestKindCollection {
+	case RequestKindCollection:
 		response, err = service.buildCollectionResponse(request)
-	} else if request.RequestKind == RequestKindEntity {
+	case RequestKindEntity:
 		response, err = service.buildEntityResponse(request)
-	} else if request.RequestKind == RequestKindProperty {
+	case RequestKindProperty:
 		response, err = service.buildPropertyResponse(request)
-	} else if request.RequestKind == RequestKindPropertyValue {
+	case RequestKindPropertyValue:
 		response, err = service.buildPropertyValueResponse(request)
-	} else if request.RequestKind == RequestKindCount {
+	case RequestKindCount:
 		response, err = service.buildCountResponse(request)
-	} else if request.RequestKind == RequestKindRef {
+	case RequestKindRef:
 		response, err = service.buildRefResponse(request)
-	} else {
+	default:
 		err = NotImplementedError("Request type not understood.")
 	}
 

@@ -5,14 +5,13 @@ import (
 )
 
 func TestSimpleMetadata(t *testing.T) {
-
 	entity1 := GoDataEntityType{
 		Name: "TestEntity1",
 		Key:  &GoDataKey{PropertyRef: &GoDataPropertyRef{Name: "Id"}},
 		Properties: []*GoDataProperty{
-			&GoDataProperty{Name: "Id", Type: "Edm.Int32"},
-			&GoDataProperty{Name: "FirstName", Type: "Edm.String"},
-			&GoDataProperty{Name: "LastName", Type: "Edm.String"},
+			{Name: "Id", Type: "Edm.Int32"},
+			{Name: "FirstName", Type: "Edm.String"},
+			{Name: "LastName", Type: "Edm.String"},
 		},
 	}
 
@@ -48,7 +47,6 @@ func TestSimpleMetadata(t *testing.T) {
 	expected += "</edmx:Edmx>"
 
 	actual, err := root.Bytes()
-
 	if err != nil {
 		t.Error(err)
 	}

@@ -7,11 +7,12 @@ const (
 
 func ParseInlineCountString(inlinecount string) (*GoDataInlineCountQuery, error) {
 	result := GoDataInlineCountQuery(inlinecount)
-	if inlinecount == ALLPAGES {
+	switch inlinecount {
+	case ALLPAGES:
 		return &result, nil
-	} else if inlinecount == NONE {
+	case NONE:
 		return &result, nil
-	} else {
+	default:
 		return nil, BadRequestError("Invalid inlinecount query.")
 	}
 }

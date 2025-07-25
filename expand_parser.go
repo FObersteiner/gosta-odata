@@ -55,7 +55,6 @@ func ExpandTokenizer() *Tokenizer {
 
 func ParseExpandString(expand string) (*GoDataExpandQuery, error) {
 	tokens, err := GlobalExpandTokenizer.Tokenize(expand)
-
 	if err != nil {
 		return nil, err
 	}
@@ -68,13 +67,14 @@ func ParseExpandString(expand string) (*GoDataExpandQuery, error) {
 		token := tokens[0]
 		tokens = tokens[1:]
 
-		if token.Value == "(" {
+		switch token.Value {
+		case "(":
 			queue.Enqueue(token)
 			stack.Push(token)
-		} else if token.Value == ")" {
+		case ")":
 			queue.Enqueue(token)
 			stack.Pop()
-		} else if token.Value == "," {
+		case ",":
 			if stack.Empty() {
 				// no paren on the stack, parse this item and start a new queue
 				item, err := ParseExpandItem(queue)
@@ -87,7 +87,7 @@ func ParseExpandString(expand string) (*GoDataExpandQuery, error) {
 				// this comma is inside a nested expression, keep it in the queue
 				queue.Enqueue(token)
 			}
-		} else {
+		default:
 			queue.Enqueue(token)
 		}
 	}
@@ -106,7 +106,6 @@ func ParseExpandString(expand string) (*GoDataExpandQuery, error) {
 }
 
 func ParseExpandItem(input tokenQueue) (*ExpandItem, error) {
-
 	item := &ExpandItem{}
 	item.Path = []*Token{}
 
@@ -252,7 +251,6 @@ func SemanticizeExpandQuery(
 	service *GoDataService,
 	entity *GoDataEntityType,
 ) error {
-
 	if expand == nil {
 		return nil
 	}
@@ -284,7 +282,7 @@ func SemanticizeExpandQuery(
 		if item.Path[0].Value == "*" {
 			// replace wildcard with a copy of every navigation property
 			for _, navProp := range service.NavigationPropertyLookup[entity] {
-				path := []*Token{&Token{Value: navProp.Name, Type: ExpandTokenLiteral}}
+				path := []*Token{{Value: navProp.Name, Type: ExpandTokenLiteral}}
 				newItem := &ExpandItem{
 					Path:   append(path, item.Path[1:]...),
 					Levels: item.Levels,
@@ -315,7 +313,6 @@ func semanticizeExpandItem(
 	service *GoDataService,
 	entity *GoDataEntityType,
 ) error {
-
 	// TODO: allow multiple path segments in expand clause
 	// TODO: handle $ref
 	if len(item.Path) > 1 {

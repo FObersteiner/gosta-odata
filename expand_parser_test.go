@@ -8,7 +8,6 @@ func TestTrivialExpand(t *testing.T) {
 	input := "Products/Categories"
 
 	output, err := ParseExpandString(input)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -28,7 +27,6 @@ func TestSimpleExpand(t *testing.T) {
 	input := "Products($filter=DiscontinuedDate eq null)"
 
 	output, err := ParseExpandString(input)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -59,7 +57,6 @@ func TestExpandNestedCommas(t *testing.T) {
 	input := "DirectReports($select=FirstName,LastName;$levels=4)"
 
 	output, err := ParseExpandString(input)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -86,14 +83,12 @@ func TestExpandNestedCommas(t *testing.T) {
 		t.Error("Levels does not equal 4")
 		return
 	}
-
 }
 
 func TestExpandNestedParens(t *testing.T) {
 	input := "Products($filter=not (DiscontinuedDate eq null))"
 
 	output, err := ParseExpandString(input)
-
 	if err != nil {
 		t.Error(err)
 		return

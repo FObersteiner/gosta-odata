@@ -18,29 +18,28 @@ type testResponseValue struct {
 }
 
 func TestResponseWriter(t *testing.T) {
-
 	test := &GoDataResponse{
 		Fields: map[string]*GoDataResponseField{
-			"@odata.context": &GoDataResponseField{
+			"@odata.context": {
 				Value: "http://service.example",
 			},
-			"@odata.count": &GoDataResponseField{
+			"@odata.count": {
 				Value: 8,
 			},
-			"value": &GoDataResponseField{
+			"value": {
 				Value: []*GoDataResponseField{
-					&GoDataResponseField{
+					{
 						Value: map[string]*GoDataResponseField{
-							"Name": &GoDataResponseField{Value: "John Doe"},
-							"Age":  &GoDataResponseField{11.01},
-							"Male": &GoDataResponseField{Value: "Female"},
+							"Name": {Value: "John Doe"},
+							"Age":  {11.01},
+							"Male": {Value: "Female"},
 						},
 					},
-					&GoDataResponseField{
+					{
 						Value: map[string]*GoDataResponseField{
-							"Name":   &GoDataResponseField{Value: "Jane \"Cool\" Doe"},
-							"Age":    &GoDataResponseField{12.1},
-							"Gender": &GoDataResponseField{Value: "Female"},
+							"Name":   {Value: "Jane \"Cool\" Doe"},
+							"Age":    {12.1},
+							"Gender": {Value: "Female"},
 						},
 					},
 				},
@@ -49,7 +48,6 @@ func TestResponseWriter(t *testing.T) {
 	}
 
 	written, err := test.Json()
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -57,7 +55,6 @@ func TestResponseWriter(t *testing.T) {
 
 	var result testResponseJson
 	err = json.Unmarshal(written, &result)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -87,5 +84,4 @@ func TestResponseWriter(t *testing.T) {
 		t.Error("Second value name is", result.Value[1].Name)
 		return
 	}
-
 }

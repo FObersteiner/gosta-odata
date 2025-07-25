@@ -11,13 +11,13 @@ func TestFilterTokenizerGeoFunc(t *testing.T) {
 	tokenizer := GlobalFilterTokenizer
 	input := "st_within(location, geography'LINESTRING(7.5 51.5, 7.5 53.5)')"
 	expect := []*Token{
-		&Token{Value: "st_within", Type: FilterTokenFunc},
-		&Token{Value: "(", Type: FilterTokenOpenParen},
-		&Token{Value: "location", Type: FilterTokenLiteral},
-		&Token{Value: ",", Type: FilterTokenComma},
-		&Token{Value: "geography", Type: FilterTokenGeography},
-		&Token{Value: "'LINESTRING(7.5 51.5, 7.5 53.5)'", Type: FilterTokenString},
-		&Token{Value: ")", Type: FilterTokenCloseParen},
+		{Value: "st_within", Type: FilterTokenFunc},
+		{Value: "(", Type: FilterTokenOpenParen},
+		{Value: "location", Type: FilterTokenLiteral},
+		{Value: ",", Type: FilterTokenComma},
+		{Value: "geography", Type: FilterTokenGeography},
+		{Value: "'LINESTRING(7.5 51.5, 7.5 53.5)'", Type: FilterTokenString},
+		{Value: ")", Type: FilterTokenCloseParen},
 	}
 	output, err := tokenizer.Tokenize(input)
 	if err != nil {
@@ -34,11 +34,11 @@ func TestLogicalOperator(t *testing.T) {
 	tokenizer := GlobalFilterTokenizer
 	input := "properties/gemeentecode eq '518'"
 	expect := []*Token{
-		&Token{Value: "properties", Type: FilterTokenLiteral},
-		&Token{Value: "/", Type: FilterTokenNav},
-		&Token{Value: "gemeentecode", Type: FilterTokenLiteral},
-		&Token{Value: "eq", Type: FilterTokenLogical},
-		&Token{Value: "'518'", Type: FilterTokenString},
+		{Value: "properties", Type: FilterTokenLiteral},
+		{Value: "/", Type: FilterTokenNav},
+		{Value: "gemeentecode", Type: FilterTokenLiteral},
+		{Value: "eq", Type: FilterTokenLogical},
+		{Value: "'518'", Type: FilterTokenString},
 	}
 	output, err := tokenizer.Tokenize(input)
 	if err != nil {
@@ -94,24 +94,24 @@ func TestFilterAny(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "Tags/any(d:d/Key eq 'Site' and d/Value lt 10)"
 	expect := []*Token{
-		&Token{Value: "Tags", Type: FilterTokenLiteral},
-		&Token{Value: "/", Type: FilterTokenNav},
-		&Token{Value: "any", Type: FilterTokenLambda},
-		&Token{Value: "(", Type: FilterTokenOpenParen},
-		&Token{Value: "d", Type: FilterTokenLiteral},
-		&Token{Value: ":", Type: FilterTokenColon},
-		&Token{Value: "d", Type: FilterTokenLiteral},
-		&Token{Value: "/", Type: FilterTokenNav},
-		&Token{Value: "Key", Type: FilterTokenLiteral},
-		&Token{Value: "eq", Type: FilterTokenLogical},
-		&Token{Value: "'Site'", Type: FilterTokenString},
-		&Token{Value: "and", Type: FilterTokenLogical},
-		&Token{Value: "d", Type: FilterTokenLiteral},
-		&Token{Value: "/", Type: FilterTokenNav},
-		&Token{Value: "Value", Type: FilterTokenLiteral},
-		&Token{Value: "lt", Type: FilterTokenLogical},
-		&Token{Value: "10", Type: FilterTokenInteger},
-		&Token{Value: ")", Type: FilterTokenCloseParen},
+		{Value: "Tags", Type: FilterTokenLiteral},
+		{Value: "/", Type: FilterTokenNav},
+		{Value: "any", Type: FilterTokenLambda},
+		{Value: "(", Type: FilterTokenOpenParen},
+		{Value: "d", Type: FilterTokenLiteral},
+		{Value: ":", Type: FilterTokenColon},
+		{Value: "d", Type: FilterTokenLiteral},
+		{Value: "/", Type: FilterTokenNav},
+		{Value: "Key", Type: FilterTokenLiteral},
+		{Value: "eq", Type: FilterTokenLogical},
+		{Value: "'Site'", Type: FilterTokenString},
+		{Value: "and", Type: FilterTokenLogical},
+		{Value: "d", Type: FilterTokenLiteral},
+		{Value: "/", Type: FilterTokenNav},
+		{Value: "Value", Type: FilterTokenLiteral},
+		{Value: "lt", Type: FilterTokenLogical},
+		{Value: "10", Type: FilterTokenInteger},
+		{Value: ")", Type: FilterTokenCloseParen},
 	}
 	output, err := tokenizer.Tokenize(input)
 	if err != nil {
@@ -128,18 +128,18 @@ func TestFilterAll(t *testing.T) {
 	tokenizer := FilterTokenizer()
 	input := "Tags/all(d:d/Key eq 'Site')"
 	expect := []*Token{
-		&Token{Value: "Tags", Type: FilterTokenLiteral},
-		&Token{Value: "/", Type: FilterTokenNav},
-		&Token{Value: "all", Type: FilterTokenLambda},
-		&Token{Value: "(", Type: FilterTokenOpenParen},
-		&Token{Value: "d", Type: FilterTokenLiteral},
-		&Token{Value: ":", Type: FilterTokenColon},
-		&Token{Value: "d", Type: FilterTokenLiteral},
-		&Token{Value: "/", Type: FilterTokenNav},
-		&Token{Value: "Key", Type: FilterTokenLiteral},
-		&Token{Value: "eq", Type: FilterTokenLogical},
-		&Token{Value: "'Site'", Type: FilterTokenString},
-		&Token{Value: ")", Type: FilterTokenCloseParen},
+		{Value: "Tags", Type: FilterTokenLiteral},
+		{Value: "/", Type: FilterTokenNav},
+		{Value: "all", Type: FilterTokenLambda},
+		{Value: "(", Type: FilterTokenOpenParen},
+		{Value: "d", Type: FilterTokenLiteral},
+		{Value: ":", Type: FilterTokenColon},
+		{Value: "d", Type: FilterTokenLiteral},
+		{Value: "/", Type: FilterTokenNav},
+		{Value: "Key", Type: FilterTokenLiteral},
+		{Value: "eq", Type: FilterTokenLogical},
+		{Value: "'Site'", Type: FilterTokenString},
+		{Value: ")", Type: FilterTokenCloseParen},
 	}
 	output, err := tokenizer.Tokenize(input)
 	if err != nil {
@@ -153,17 +153,16 @@ func TestFilterAll(t *testing.T) {
 }
 
 func TestFilterTokenizer(t *testing.T) {
-
 	tokenizer := FilterTokenizer()
 	input := "Name eq 'Milk' and Price lt 2.55"
 	expect := []*Token{
-		&Token{Value: "Name", Type: FilterTokenLiteral},
-		&Token{Value: "eq", Type: FilterTokenLogical},
-		&Token{Value: "'Milk'", Type: FilterTokenString},
-		&Token{Value: "and", Type: FilterTokenLogical},
-		&Token{Value: "Price", Type: FilterTokenLiteral},
-		&Token{Value: "lt", Type: FilterTokenLogical},
-		&Token{Value: "2.55", Type: FilterTokenFloat},
+		{Value: "Name", Type: FilterTokenLiteral},
+		{Value: "eq", Type: FilterTokenLogical},
+		{Value: "'Milk'", Type: FilterTokenString},
+		{Value: "and", Type: FilterTokenLogical},
+		{Value: "Price", Type: FilterTokenLiteral},
+		{Value: "lt", Type: FilterTokenLogical},
+		{Value: "2.55", Type: FilterTokenFloat},
 	}
 	output, err := tokenizer.Tokenize(input)
 	if err != nil {
@@ -177,17 +176,16 @@ func TestFilterTokenizer(t *testing.T) {
 }
 
 func TestFilterTokenizerFunc(t *testing.T) {
-
 	tokenizer := FilterTokenizer()
 	input := "not endswith(Name,'ilk')"
 	expect := []*Token{
-		&Token{Value: "not", Type: FilterTokenLogical},
-		&Token{Value: "endswith", Type: FilterTokenFunc},
-		&Token{Value: "(", Type: FilterTokenOpenParen},
-		&Token{Value: "Name", Type: FilterTokenLiteral},
-		&Token{Value: ",", Type: FilterTokenComma},
-		&Token{Value: "'ilk'", Type: FilterTokenString},
-		&Token{Value: ")", Type: FilterTokenCloseParen},
+		{Value: "not", Type: FilterTokenLogical},
+		{Value: "endswith", Type: FilterTokenFunc},
+		{Value: "(", Type: FilterTokenOpenParen},
+		{Value: "Name", Type: FilterTokenLiteral},
+		{Value: ",", Type: FilterTokenComma},
+		{Value: "'ilk'", Type: FilterTokenString},
+		{Value: ")", Type: FilterTokenCloseParen},
 	}
 	output, err := tokenizer.Tokenize(input)
 	if err != nil {
@@ -215,9 +213,9 @@ func CompareTokens(a, b []*Token) (bool, error) {
 		for _, t := range b {
 			res += fmt.Sprintf("| %s ", t.Value)
 		}
-		return false, errors.New(fmt.Sprintf("Different lengths, result: %s", res))
+		return false, fmt.Errorf("Different lengths, result: %s", res)
 	}
-	for i, _ := range a {
+	for i := range a {
 		if a[i].Value != b[i].Value || a[i].Type != b[i].Type {
 			return false, errors.New("Different at index " + strconv.Itoa(i) + " " +
 				a[i].Value + " != " + b[i].Value +
@@ -228,7 +226,6 @@ func CompareTokens(a, b []*Token) (bool, error) {
 }
 
 func TestFilterParserTree(t *testing.T) {
-
 	input := "not (A eq B)"
 
 	tokens, err := GlobalFilterTokenizer.Tokenize(input)
@@ -237,14 +234,12 @@ func TestFilterParserTree(t *testing.T) {
 		return
 	}
 	output, err := GlobalFilterParser.InfixToPostfix(tokens)
-
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
 	tree, err := GlobalFilterParser.PostfixToTree(output)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -256,7 +251,6 @@ func TestFilterParserTree(t *testing.T) {
 	if tree.Children[0].Token.Value != "eq" {
 		t.Error("First child is '" + tree.Children[1].Token.Value + "' not 'eq'")
 	}
-
 }
 
 func printTree(n *ParseNode, level int) {
@@ -288,7 +282,7 @@ func TestNestedPath(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	//printTree(tree, 0)
+	// printTree(tree, 0)
 	if tree.Token.Value != "eq" {
 		t.Error("Root is '" + tree.Token.Value + "' not 'eq'")
 	}
@@ -318,7 +312,7 @@ func TestLambda(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	//printTree(tree, 0)
+	// printTree(tree, 0)
 
 	if tree.Token.Value != "/" {
 		t.Error("Root is '" + tree.Token.Value + "' not '/'")

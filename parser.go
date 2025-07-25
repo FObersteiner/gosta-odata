@@ -58,7 +58,7 @@ func (t *Tokenizer) TokenizeBytes(target []byte) ([]*Token, error) {
 			token := m.Re.Find(target)
 
 			if len(token) > 0 {
-				//If a filter is found but next char is not "(" than don't treat it as filter
+				// If a filter is found but next char is not "(" than don't treat it as filter
 				if m.Token == FilterTokenFunc && string(target[len(token):len(token)+1]) != "(" {
 					continue
 				}
@@ -189,7 +189,7 @@ func (p *Parser) InfixToPostfix(tokens []*Token) (*tokenQueue, error) {
 			stack.Pop()
 			// if next token is a function, move it to the queue
 			if !stack.Empty() {
-				//if _, ok := p.Functions[stack.Peek().Value]; ok {
+				// if _, ok := p.Functions[stack.Peek().Value]; ok {
 				if stack.Peek().Type == FilterTokenFunc {
 					queue.Enqueue(stack.Pop())
 				}
@@ -272,7 +272,7 @@ type tokenStackNode struct {
 
 func (s *tokenStack) Push(t *Token) {
 	node := tokenStackNode{t, s.Head}
-	//fmt.Println("Pushed:", t.Value, "->", s.String())
+	// fmt.Println("Pushed:", t.Value, "->", s.String())
 	s.Head = &node
 	s.Size++
 }
@@ -281,7 +281,7 @@ func (s *tokenStack) Pop() *Token {
 	node := s.Head
 	s.Head = node.Prev
 	s.Size--
-	//fmt.Println("Popped:", node.Token.Value, "<-", s.String())
+	// fmt.Println("Popped:", node.Token.Value, "<-", s.String())
 	return node.Token
 }
 
@@ -316,7 +316,7 @@ type tokenQueueNode struct {
 
 func (q *tokenQueue) Enqueue(t *Token) {
 	node := tokenQueueNode{t, q.Tail, nil}
-	//fmt.Println(t.Value)
+	// fmt.Println(t.Value)
 
 	if q.Tail == nil {
 		q.Head = &node

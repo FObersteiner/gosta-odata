@@ -25,8 +25,10 @@ const (
 	FilterTokenGeography
 )
 
-var GlobalFilterTokenizer = FilterTokenizer()
-var GlobalFilterParser = FilterParser()
+var (
+	GlobalFilterTokenizer = FilterTokenizer()
+	GlobalFilterParser    = FilterParser()
+)
 
 // Convert an input string from the $filter part of the URL into a parse
 // tree that can be used by providers to create a response.
@@ -156,14 +158,12 @@ func SemanticizeFilterQuery(
 	service *GoDataService,
 	entity *GoDataEntityType,
 ) error {
-
 	if filter == nil || filter.Tree == nil {
 		return nil
 	}
 
 	var semanticizeFilterNode func(node *ParseNode) error
 	semanticizeFilterNode = func(node *ParseNode) error {
-
 		if node.Token.Type == FilterTokenLiteral {
 			prop, ok := service.PropertyLookup[entity][node.Token.Value]
 			if !ok {

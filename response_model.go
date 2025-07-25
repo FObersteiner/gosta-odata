@@ -53,7 +53,7 @@ func (f *GoDataResponseField) Json() ([]byte, error) {
 
 func prepareJsonString(s []byte) ([]byte, error) {
 	// escape double quotes
-	s = bytes.Replace(s, []byte("\""), []byte("\\\""), -1)
+	s = bytes.ReplaceAll(s, []byte("\""), []byte("\\\""))
 	var buf bytes.Buffer
 	buf.WriteByte('"')
 	buf.Write(s)

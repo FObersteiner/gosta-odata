@@ -17,29 +17,30 @@ func TestPEMDAS(t *testing.T) {
 
 	// 3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3
 	tokens := []*Token{
-		&Token{Value: "3"},
-		&Token{Value: "+"},
-		&Token{Value: "4"},
-		&Token{Value: "*"},
-		&Token{Value: "2"},
-		&Token{Value: "/"},
-		&Token{Value: "("},
-		&Token{Value: "1"},
-		&Token{Value: "-"},
-		&Token{Value: "5"},
-		&Token{Value: ")"},
-		&Token{Value: "^"},
-		&Token{Value: "2"},
-		&Token{Value: "^"},
-		&Token{Value: "3"},
+		{Value: "3"},
+		{Value: "+"},
+		{Value: "4"},
+		{Value: "*"},
+		{Value: "2"},
+		{Value: "/"},
+		{Value: "("},
+		{Value: "1"},
+		{Value: "-"},
+		{Value: "5"},
+		{Value: ")"},
+		{Value: "^"},
+		{Value: "2"},
+		{Value: "^"},
+		{Value: "3"},
 	}
 
 	// 3 4 2 * 1 5 - 2 3 ^ ^ / +
-	expected := []string{"3", "4", "2", "*", "1", "5", "-", "2", "3", "^", "^",
-		"/", "+"}
+	expected := []string{
+		"3", "4", "2", "*", "1", "5", "-", "2", "3", "^", "^",
+		"/", "+",
+	}
 
 	result, err := parser.InfixToPostfix(tokens)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -71,21 +72,21 @@ func BenchmarkPEMDAS(b *testing.B) {
 
 	// 3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3
 	tokens := []*Token{
-		&Token{Value: "3"},
-		&Token{Value: "+"},
-		&Token{Value: "4"},
-		&Token{Value: "*"},
-		&Token{Value: "2"},
-		&Token{Value: "/"},
-		&Token{Value: "("},
-		&Token{Value: "1"},
-		&Token{Value: "-"},
-		&Token{Value: "5"},
-		&Token{Value: ")"},
-		&Token{Value: "^"},
-		&Token{Value: "2"},
-		&Token{Value: "^"},
-		&Token{Value: "3"},
+		{Value: "3"},
+		{Value: "+"},
+		{Value: "4"},
+		{Value: "*"},
+		{Value: "2"},
+		{Value: "/"},
+		{Value: "("},
+		{Value: "1"},
+		{Value: "-"},
+		{Value: "5"},
+		{Value: ")"},
+		{Value: "^"},
+		{Value: "2"},
+		{Value: "^"},
+		{Value: "3"},
 	}
 
 	for i := 0; i < b.N; i++ {
@@ -101,22 +102,21 @@ func TestBoolean(t *testing.T) {
 
 	// (A OR NOT B) AND C OR B
 	tokens := []*Token{
-		&Token{Value: "("},
-		&Token{Value: "A"},
-		&Token{Value: "OR"},
-		&Token{Value: "NOT"},
-		&Token{Value: "B"},
-		&Token{Value: ")"},
-		&Token{Value: "AND"},
-		&Token{Value: "C"},
-		&Token{Value: "OR"},
-		&Token{Value: "B"},
+		{Value: "("},
+		{Value: "A"},
+		{Value: "OR"},
+		{Value: "NOT"},
+		{Value: "B"},
+		{Value: ")"},
+		{Value: "AND"},
+		{Value: "C"},
+		{Value: "OR"},
+		{Value: "B"},
 	}
 
 	// A B NOT OR C AND B OR
 	expected := []string{"A", "B", "NOT", "OR", "C", "AND", "B", "OR"}
 	result, err := parser.InfixToPostfix(tokens)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -149,41 +149,41 @@ func TestFunc(t *testing.T) {
 
 	// max(sin(5*pi)+3, sin(5)+volume(3,2,4)/2)
 	tokens := []*Token{
-		&Token{Value: "max"},
-		&Token{Value: "("},
-		&Token{Value: "sin"},
-		&Token{Value: "("},
-		&Token{Value: "5"},
-		&Token{Value: "*"},
-		&Token{Value: "pi"},
-		&Token{Value: ")"},
-		&Token{Value: "+"},
-		&Token{Value: "3"},
-		&Token{Value: ","},
-		&Token{Value: "sin"},
-		&Token{Value: "("},
-		&Token{Value: "5"},
-		&Token{Value: ")"},
-		&Token{Value: "+"},
-		&Token{Value: "volume"},
-		&Token{Value: "("},
-		&Token{Value: "3"},
-		&Token{Value: ","},
-		&Token{Value: "2"},
-		&Token{Value: ","},
-		&Token{Value: "4"},
-		&Token{Value: ")"},
-		&Token{Value: "/"},
-		&Token{Value: "2"},
-		&Token{Value: ")"},
+		{Value: "max"},
+		{Value: "("},
+		{Value: "sin"},
+		{Value: "("},
+		{Value: "5"},
+		{Value: "*"},
+		{Value: "pi"},
+		{Value: ")"},
+		{Value: "+"},
+		{Value: "3"},
+		{Value: ","},
+		{Value: "sin"},
+		{Value: "("},
+		{Value: "5"},
+		{Value: ")"},
+		{Value: "+"},
+		{Value: "volume"},
+		{Value: "("},
+		{Value: "3"},
+		{Value: ","},
+		{Value: "2"},
+		{Value: ","},
+		{Value: "4"},
+		{Value: ")"},
+		{Value: "/"},
+		{Value: "2"},
+		{Value: ")"},
 	}
 
 	// 5 pi * sin 3 + 5 sin 3 2 4 volume 2 / + max
 	expected := []string{
 		"5", "pi", "*", "sin", "3", "+", "5", "sin", "3", "2", "4", "volume", "2",
-		"/", "+", "max"}
+		"/", "+", "max",
+	}
 	result, err := parser.InfixToPostfix(tokens)
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -215,24 +215,23 @@ func TestTree(t *testing.T) {
 
 	// sin ( max ( 2, 3 ) / 3 * 3.1415 )
 	tokens := []*Token{
-		&Token{Value: "sin"},
-		&Token{Value: "("},
-		&Token{Value: "max"},
-		&Token{Value: "("},
-		&Token{Value: "2"},
-		&Token{Value: ","},
-		&Token{Value: "3"},
-		&Token{Value: ")"},
-		&Token{Value: "/"},
-		&Token{Value: "3"},
-		&Token{Value: "*"},
-		&Token{Value: "pi"},
-		&Token{Value: ")"},
+		{Value: "sin"},
+		{Value: "("},
+		{Value: "max"},
+		{Value: "("},
+		{Value: "2"},
+		{Value: ","},
+		{Value: "3"},
+		{Value: ")"},
+		{Value: "/"},
+		{Value: "3"},
+		{Value: "*"},
+		{Value: "pi"},
+		{Value: ")"},
 	}
 
 	// 2 3 max 3 / 3.1415 * sin
 	result, err := parser.InfixToPostfix(tokens)
-
 	if err != nil {
 		t.Error(err)
 	}
@@ -277,19 +276,19 @@ func BenchmarkBuildTree(b *testing.B) {
 
 	// sin ( max ( 2, 3 ) / 3 * 3.1415 )
 	tokens := []*Token{
-		&Token{Value: "sin"},
-		&Token{Value: "("},
-		&Token{Value: "max"},
-		&Token{Value: "("},
-		&Token{Value: "2"},
-		&Token{Value: ","},
-		&Token{Value: "3"},
-		&Token{Value: ")"},
-		&Token{Value: "/"},
-		&Token{Value: "3"},
-		&Token{Value: "*"},
-		&Token{Value: "pi"},
-		&Token{Value: ")"},
+		{Value: "sin"},
+		{Value: "("},
+		{Value: "max"},
+		{Value: "("},
+		{Value: "2"},
+		{Value: ","},
+		{Value: "3"},
+		{Value: ")"},
+		{Value: "/"},
+		{Value: "3"},
+		{Value: "*"},
+		{Value: "pi"},
+		{Value: ")"},
 	}
 
 	// 2 3 max 3 / 3.1415 * sin
